@@ -100,3 +100,8 @@ button.remove-asset {
 button.remove-asset:focus {
     outline: none;
 }
+
+.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}

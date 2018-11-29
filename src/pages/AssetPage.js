@@ -2,25 +2,27 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import Preview from '../components/Preview';
-import * as assets from '../assets';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { removeSelection } from '../actions/assets.actions';
 
 class AssetPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { 
-            assets: assets,
-            selectedAssets: []
-        }
+    }
+
+    removeSelection = (asset) => {
+        this.props.removeSelection(asset)
     }
 
     render() {
         return (
             <div className="wrapper">
-                <Navbar selectedAssets={this.state.selectedAssets}/>
+                <Navbar assets={this.props.selected}/>
                 <div className="container asset-builder">
                     <div className="row">
-                        <Sidebar assets={this.state.assets}/>  
-                        <Preview selectedAssets={this.state.selectedAssets}/>
+                        <Sidebar assets={this.props.assets}/>  
+                        <Preview selection={this.props.selected} removeSelection={this.removeSelection}/>
                     </div>
                 </div>
             </div>
@@ -28,4 +30,18 @@ class AssetPage extends React.Component {
     }
 }
 
-export default AssetPage;
+const mapStateToProps = (state) => {
+    return {
+        assets: state.assets,
+        selected: state.selected
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        removeSelection: bindActionCreators(removeSelection, dispatch)
+    }
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(AssetPage);
